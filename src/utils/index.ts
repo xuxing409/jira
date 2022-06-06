@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
 export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
+
+// 用于queryString清除对象中的空值 如 ?list=&
 export const cleanObject = (object: object) => {
   const result = { ...object };
 
@@ -14,13 +16,13 @@ export const cleanObject = (object: object) => {
   });
   return result;
 };
-
+// 模仿onMounted 生命周期钩子
 export const useMount = (callback: () => void) => {
   useEffect(() => {
     callback();
   }, []);
 };
-
+// 防抖
 export const useDebounce = <T>(value: T, delay?: number) => {
   const [debounceValue, setDebounceValue] = useState(value);
 

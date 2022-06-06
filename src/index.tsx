@@ -4,13 +4,17 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {loadDevTools} from 'jira-dev-tool'
+import { AppProviders } from 'context';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 loadDevTools(()=> root.render(
   <React.StrictMode>
-    <App />
+    {/* app级别提供者，一般用于共享全局用户信息token、主题等 */}
+    <AppProviders>
+      <App />
+    </AppProviders>
   </React.StrictMode>
 ))
 

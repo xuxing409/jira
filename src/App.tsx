@@ -1,14 +1,15 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-// import { ProjectListScreen } from 'srceens/project-list';
-import { LoginScreen } from 'srceens/login';
-
+import { useAuth } from 'context/auth-context';
+import { AuthenticatedApp } from 'authenticated-app';
+import { UnauthenticatedApp } from 'unauthenticated-app';
+// 通过是否存在user 区分渲染登录组件 和 app组件
 function App() {
+  const {user} = useAuth()
   return (
     <div className="App">
-      {/* <ProjectListScreen /> */}
-      <LoginScreen />
+      {user? <AuthenticatedApp /> : <UnauthenticatedApp/>}
     </div>
   );
 }
