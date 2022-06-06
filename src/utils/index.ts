@@ -22,7 +22,7 @@ export const useMount = (callback: () => void) => {
     callback();
   }, []);
 };
-// 防抖
+// 防抖钩子
 export const useDebounce = <T>(value: T, delay?: number) => {
   const [debounceValue, setDebounceValue] = useState(value);
 

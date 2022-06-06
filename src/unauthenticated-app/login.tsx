@@ -6,6 +6,7 @@ export const LoginScreen = () => {
 
   const handelSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // 获取form表单的用户名密码
     const username = (event.currentTarget.elements[0] as HTMLInputElement)
       .value;
     const password = (event.currentTarget.elements[1] as HTMLInputElement)
