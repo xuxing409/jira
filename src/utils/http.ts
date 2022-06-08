@@ -63,7 +63,7 @@ export const useHttp = () => {
 };
 
 // 类型别名
-type FavoriteNumber = string | number;
+// type FavoriteNumber = string | number;
 // 类型别名和interface 在很多情况下可以互换
 // interface Person {
 //   name: string;
@@ -75,8 +75,27 @@ type FavoriteNumber = string | number;
 
 //  interface 无法实现 utility Type
 
-// type Person {
-//   name: string,
-//   age: number
-// }
-// const xiaoMing: Partial<Person>= {name:'xiaoming'}
+// Partial 使用后可以使{}类型中的属性可有可无
+// type Partial<T> = { [P in keyof T]?: T[P] };
+
+// type Person = {
+//   name: string;
+//   age: number;
+// };
+// const xiaoMing: Partial<Person> = { name: "xiaoming" };
+
+// omit 可以在第二个参数指定要删除的参数，从而形成一个新的类型
+// type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
+// const shenMiRen: Omit<Person, "name"> = { age: 8 }; // {age: number}
+
+// keyof 操作符可以用来一个对象中的所有 key 值 组成联合类型
+// type PersonKeys = keyof Person; // "name" | "age"
+
+// Pick 从类型定义的属性中，选取指定一组属性，返回一个新的类型定义。
+// type Pick<T, K extends keyof T> = {
+//   [P in K]: T[P];
+// };
+// type PersonOnlyName = Pick<Person, "name" | "age">;
+// Exclude 从类型 Type 中剔除所有可以赋值给 ExcludedUnion 的属性，然后构造一个类型。
+// type Exclude<T, U> = T extends U ? never : T;
+// type Age = Exclude<PersonKeys, "name">;
