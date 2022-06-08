@@ -1,5 +1,6 @@
 import * as auth from "auth-provider";
 import { useAuth } from "context/auth-context";
+import { type } from "os";
 import qs from "qs";
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -52,7 +53,7 @@ export const http = async (
 export const useHttp = () => {
   // 1.获取用户token
   const { user } = useAuth();
-  // 使用Parameters Ts操作符 和 typeof 替换和http方法相同的类型
+  // 使用Parameters Ts操作符 和 typeof（这个和js的typeof（runtime） 不同,是静态的时候运行） 替换和http方法相同的类型
   return (...[endpoint, config]: Parameters<typeof http>) =>
     // 2.设置token
     http(endpoint, {
@@ -60,3 +61,22 @@ export const useHttp = () => {
       token: user?.token,
     });
 };
+
+// 类型别名
+type FavoriteNumber = string | number;
+// 类型别名和interface 在很多情况下可以互换
+// interface Person {
+//   name: string;
+// }
+// type Person = { name: string };
+
+// 类型别名， interface在这种情况下没法替代type
+// type FavoriteNumber = string | number;
+
+//  interface 无法实现 utility Type
+
+// type Person {
+//   name: string,
+//   age: number
+// }
+// const xiaoMing: Partial<Person>= {name:'xiaoming'}
