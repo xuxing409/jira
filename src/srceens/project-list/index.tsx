@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import * as qs from "qs";
 import { List } from "./list";
 import { SearchPanel } from "./search-panel";
 import { cleanObject, useDebounce, useMount } from "utils";

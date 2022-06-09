@@ -20,7 +20,7 @@ export const cleanObject = (object: object) => {
 export const useMount = (callback: () => void) => {
   useEffect(() => {
     callback();
-  }, []);
+  }, [callback]);
 };
 // 防抖钩子
 export const useDebounce = <T>(value: T, delay?: number) => {
