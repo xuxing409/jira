@@ -17,7 +17,9 @@ export const ProjectListScreen = () => {
 
   useEffect(() => {
     client("projects", { data: cleanObject(debounceParam) }).then(setList);
-  }, [client, debounceParam]);
+    // 依赖项里加上client会无线循环
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debounceParam]);
   useMount(() => {
     client("users").then(setUsers);
   });
@@ -32,4 +34,4 @@ export const ProjectListScreen = () => {
 
 const Container = styled.div`
   padding: 3.2rem;
-`
+`;

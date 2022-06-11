@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 
 export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
-
+export const isVoid = (value: unknown) =>
+  value === undefined || value === null || value === "";
 // 用于queryString清除对象中的空值 如 ?list=&
-export const cleanObject = (object: object) => {
+export const cleanObject = (object: { [key: string]: unknown }) => {
   const result = { ...object };
 
   Object.keys(result).forEach((key) => {
-    //@ts-ignore
     const value = result[key];
-    if (isFalsy(value)) {
-      //@ts-ignore
+    if (isVoid(value)) {
       delete result[key];
     }
   });
@@ -20,7 +19,9 @@ export const cleanObject = (object: object) => {
 export const useMount = (callback: () => void) => {
   useEffect(() => {
     callback();
-  }, [callback]);
+    // TODO依赖项里加上 callback 会无限循环，这个与useCallback 和 useMemo 有关
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 };
 // 防抖钩子
 export const useDebounce = <T>(value: T, delay?: number) => {

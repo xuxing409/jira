@@ -18,6 +18,7 @@ export const List = ({ users, list }: ListProps) => {
   return (
     <Table
       pagination={false}
+      rowKey={"id"}
       columns={[
         {
           title: "名称",
@@ -31,9 +32,10 @@ export const List = ({ users, list }: ListProps) => {
 
         {
           title: "负责人",
+          dataIndex: "responsePerson",
           render(value, project) {
             return (
-              <span key={project.personId}>
+              <span>
                 {users.find((user) => user.id === project.personId)?.name ||
                   "未知"}
               </span>
@@ -42,6 +44,7 @@ export const List = ({ users, list }: ListProps) => {
         },
         {
           title: "创建时间",
+          dataIndex: "created",
           render(value, project) {
             return (
               <span>

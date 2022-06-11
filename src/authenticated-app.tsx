@@ -4,7 +4,7 @@ import { useAuth } from "context/auth-context";
 import { ProjectListScreen } from "srceens/project-list";
 import { Row } from "components/lib";
 import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
-import { Dropdown, Menu } from "antd";
+import { Button, Dropdown, Menu } from "antd";
 import type { MenuProps } from "antd";
 /**
  * grid 和 flex 各自的应用场景
@@ -30,7 +30,7 @@ export const AuthenticatedApp = () => {
         logout();
       }
     },
-    []
+    [logout]
   );
   return (
     <Container>
@@ -42,7 +42,9 @@ export const AuthenticatedApp = () => {
         </HeaderLeft>
         <HeaderRight>
           <Dropdown overlay={<Menu onClick={handleClick} items={items} />}>
-            <a onClick={(e) => e.preventDefault()}>Hi, {user?.name}</a>
+            <Button type={"link"} onClick={(e) => e.preventDefault()}>
+              Hi, {user?.name}
+            </Button>
           </Dropdown>
         </HeaderRight>
       </Header>
@@ -60,7 +62,7 @@ const Container = styled.div`
 // grid-area 用来给grid子元素取名字
 const Header = styled(Row)`
   padding: 3.2rem;
-  box-shadow: 0 0 5px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
   z-index: 1;
 `;
 
