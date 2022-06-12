@@ -4,6 +4,7 @@ import { User } from "srceens/project-list/search-panel";
 export const localStorageKey = "__auth_provider_token";
 // env 环境常量apiUrl
 const apiUrl = process.env.REACT_APP_API_URL;
+
 // 获取token
 export const getToken = () => window.localStorage.getItem(localStorageKey);
 
@@ -23,7 +24,7 @@ export const login = (data: { username: string; password: string }) => {
     if (response.ok) {
       return handelUserResponse(await response.json());
     } else {
-      return Promise.reject(data); //Promise.reject 效果类似 throw new error
+      return Promise.reject(await response.json()); //Promise.reject 效果类似 throw new error
     }
   });
 };
@@ -37,7 +38,7 @@ export const register = (data: { username: string; password: string }) => {
     if (response.ok) {
       return handelUserResponse(await response.json());
     } else {
-      return Promise.reject(data); //Promise.reject 效果类似 throw new error
+      return Promise.reject(await response.json()); //Promise.reject 效果类似 throw new error
     }
   });
 };

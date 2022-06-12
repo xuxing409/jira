@@ -1,8 +1,8 @@
-import { Table } from "antd";
+import { Table, TableProps } from "antd";
 import dayjs from "dayjs";
 import React from "react";
 import { User } from "./search-panel";
-interface Project {
+export interface Project {
   id: string;
   name: string;
   personId: string;
@@ -10,11 +10,12 @@ interface Project {
   organization: string;
   created: number;
 }
-interface ListProps {
+// 通过继承TableProps 实现将所有属性一次性传递到table上
+interface ListProps extends TableProps<Project>{
   users: User[];
-  list: Project[];
 }
-export const List = ({ users, list }: ListProps) => {
+
+export const List = ({ users, ...props }: ListProps) => {
   return (
     <Table
       pagination={false}
@@ -56,7 +57,7 @@ export const List = ({ users, list }: ListProps) => {
           },
         },
       ]}
-      dataSource={list}
+      {...props}
     />
   );
 };

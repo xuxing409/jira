@@ -3,11 +3,27 @@ import { useAuth } from "context/auth-context";
 import React from "react";
 import { LongButton } from "unauthenticated-app";
 
-export const RegisterScreen = () => {
+export const RegisterScreen = ({
+  onError,
+}: {
+  onError: (error: Error) => void;
+}) => {
   const { register } = useAuth();
 
-  const handleSubmit = (values: { username: string; password: string }) => {
-    register(values);
+  const handleSubmit = async ({cpassword,...values}: {
+    username: string;
+    password: string;
+    cpassword: string;
+  }) => {
+    if(cpassword !== values.password) {
+      onError(new Error('请确认两次输入的密码相同'))
+      return
+    }
+    try {
+      await register(values);
+    } catch (e: any) {
+      onError(e);
+    }
   };
   return (
     <Form onFinish={handleSubmit}>
@@ -22,6 +38,12 @@ export const RegisterScreen = () => {
         rules={[{ required: true, message: "请输入密码" }]}
       >
         <Input placeholder="密码" type="password" id="password"></Input>
+      </Form.Item>
+      <Form.Item
+        name={"cpassword"}
+        rules={[{ required: true, message: "请确认密码" }]}
+      >
+        <Input placeholder="请再次输入密码" type="cpassword" id="password"></Input>
       </Form.Item>
       <Form.Item>
         <LongButton htmlType="submit" type="primary">

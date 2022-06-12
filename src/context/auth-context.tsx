@@ -13,6 +13,7 @@ interface AuthForm {
 const bootstrapUser = async () => {
   let user = null;
   const token = auth.getToken();
+  // token 存在则请求用户信息
   if (token) {
     // me接口解析token,返回用户信息
     const data = await http("me", { token });
@@ -21,6 +22,7 @@ const bootstrapUser = async () => {
   return user;
 };
 
+// 创建AuthContext
 const AuthContext = React.createContext<
   | {
       user: User | null;
@@ -47,6 +49,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   });
 
   return (
+    // context 传递 需要将属性放入value中,
     <AuthContext.Provider
       children={children}
       value={{ user, login, register, logout }}
