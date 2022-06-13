@@ -7,14 +7,15 @@ export const LoginScreen = ({
   onError,
 }: {
   onError: (error: Error) => void;
-}) => {
+}) => { 
   const { login } = useAuth();
-  const {run,isLoading} = useAsync();
+  const { run, isLoading, error } = useAsync(undefined, { throwOnError: true });
 
   const handleSubmit = async (values: {
     username: string;
     password: string;
   }) => {
+    // 异步和同步混用时，只能用try catch 抓取异常
     try {
       await run(login(values));
     } catch (e: any) {
@@ -23,6 +24,7 @@ export const LoginScreen = ({
   };
   return (
     <Form onFinish={handleSubmit}>
+      {error ? error.message : null}
       <Form.Item
         name={"username"}
         rules={[{ required: true, message: "请输入用户名" }]}

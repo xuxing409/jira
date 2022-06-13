@@ -13,9 +13,19 @@ const defaultInitialState: State<null> = {
   data: null,
   error: null,
 };
+
+const defaultConfig = {
+  throwOnError: false,
+};
+
 // 使用hook 和 闭包 储存数据
 // State<D>作用使用 initialState对象的data 反向推导出D类型
-export const useAsync = <D>(initialState?: State<D>) => {
+export const useAsync = <D>(
+  initialState?: State<D>,
+  initialConfig?: typeof defaultConfig
+) => {
+  const config = { ...defaultConfig, initialConfig };
+
   // 函数传递的state覆盖默认state
   const [state, setState] = useState<State<D>>({
     ...defaultInitialState,
@@ -55,7 +65,10 @@ export const useAsync = <D>(initialState?: State<D>) => {
       .catch((error) => {
         // catch 会消化异常 如果不主动抛出,外面是接收不到异常的
         setError(error);
-        return Promise.reject(error);
+        if (config.throwOnError) {
+          return Promise.reject(error);
+        }
+        return error;
       });
   };
   return {
