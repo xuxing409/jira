@@ -36,6 +36,7 @@ export const FullPageLoading = ()=> <FullPage>
   <Spin size="large"/>
 </FullPage>
 
+// 备用ui组件（页面发生错误时使用错误边界组件包裹本组件）
 export const FullPageErrorFallback = ({error}:{error:Error | null})=> <FullPage>
   <DevTools />
   <Typography.Text type={"danger"}>{error?.message}</Typography.Text>
