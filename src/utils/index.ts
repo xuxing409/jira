@@ -39,6 +39,21 @@ export const useDebounce = <T>(value: T, delay?: number) => {
   return debounceValue;
 };
 
+export const useDocumentTitle = (
+  title: string,
+  keepOnUnmount: boolean = true
+) => {
+  const oldTitle = document.title;
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+  useEffect(() => {
+    return () => {
+      if (keepOnUnmount) document.title = oldTitle;
+    };
+  }, []);
+};
+
 // export const useDebounce = (fn, delay) => {
 //   let timeout;
 
