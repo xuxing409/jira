@@ -7,9 +7,9 @@ export const LoginScreen = ({
   onError,
 }: {
   onError: (error: Error) => void;
-}) => { 
+}) => {
   const { login } = useAuth();
-  const { run, isLoading, error } = useAsync(undefined, { throwOnError: true });
+  const { run, isLoading } = useAsync(undefined, { throwOnError: true });
 
   const handleSubmit = async (values: {
     username: string;
@@ -24,7 +24,7 @@ export const LoginScreen = ({
   };
   return (
     <Form onFinish={handleSubmit}>
-      {error ? error.message : null}
+      {/* {error ? error.message : null} */}
       <Form.Item
         name={"username"}
         rules={[{ required: true, message: "请输入用户名" }]}

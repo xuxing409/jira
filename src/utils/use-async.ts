@@ -24,7 +24,7 @@ export const useAsync = <D>(
   initialState?: State<D>,
   initialConfig?: typeof defaultConfig
 ) => {
-  const config = { ...defaultConfig, initialConfig };
+  const config = { ...defaultConfig, ...initialConfig };
 
   // 函数传递的state覆盖默认state
   const [state, setState] = useState<State<D>>({

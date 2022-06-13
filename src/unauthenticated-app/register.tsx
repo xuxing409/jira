@@ -45,8 +45,8 @@ export const RegisterScreen = ({
         name={"cpassword"}
         rules={[{ required: true, message: "请确认密码" }]}
       >
-        <Input placeholder="请再次输入密码" type="cpassword" id="password"></Input>
-      </Form.Item>
+        <Input placeholder="请再次输入密码" type="password" id="cpassword"></Input>
+      </Form.Item> 
       <Form.Item>
         <LongButton loading={isLoading} htmlType="submit" type="primary">
           注册
