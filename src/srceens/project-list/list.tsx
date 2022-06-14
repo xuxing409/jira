@@ -13,7 +13,7 @@ export interface Project {
   created: number;
 }
 // 通过继承TableProps 实现将所有属性一次性传递到table上
-interface ListProps extends TableProps<Project>{
+interface ListProps extends TableProps<Project> {
   users: User[];
 }
 
@@ -28,8 +28,8 @@ export const List = ({ users, ...props }: ListProps) => {
           sorter: (a, b) => a.name.localeCompare(b.name),
           render(value, project) {
             // react-router to 会默认添加到父路由后面
-            return <Link to={`${project.id}`}>{project.name}</Link>
-          }
+            return <Link to={`${project.id}`}>{project.name}</Link>;
+          },
         },
         {
           title: "部门",
