@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
 export const isVoid = (value: unknown) =>
@@ -39,19 +39,28 @@ export const useDebounce = <T>(value: T, delay?: number) => {
   return debounceValue;
 };
 
+// useRef 返回的对象在整个组件的生命周期保持不变
+// 利用这个特性替换闭包实现useDocumentTitle这个hook
 export const useDocumentTitle = (
   title: string,
   keepOnUnmount: boolean = true
 ) => {
-  const oldTitle = document.title;
+  const oldTitle = useRef(document.title).current;
+  // 页面加载前 旧titile
+  // 页面加载后 新title
+
   useEffect(() => {
     document.title = title;
   }, [title]);
+
   useEffect(() => {
     return () => {
-      if (keepOnUnmount) document.title = oldTitle;
+      if (!keepOnUnmount) {
+        // 如果不指定依赖，读取到的title就是组件加载前的title（也就是旧的title）
+        document.title = oldTitle;
+      }
     };
-  }, []);
+  }, [keepOnUnmount, oldTitle]);
 };
 
 // export const useDebounce = (fn, delay) => {
