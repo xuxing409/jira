@@ -6,6 +6,9 @@ import { Row } from "components/lib";
 import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
 import { Button, Dropdown, Menu } from "antd";
 import type { MenuProps } from "antd";
+import { BrowserRouter as Router } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router";
+import ProjectScreen from "srceens/project";
 /**
  * grid 和 flex 各自的应用场景
  * 1. 要考虑，是一维布局 还是 二维布局
@@ -19,6 +22,25 @@ import type { MenuProps } from "antd";
  */
 
 export const AuthenticatedApp = () => {
+  return (
+    <Container>
+      <PageHeader />
+      <Main>
+        <Router>
+          <Routes>
+            <Route path={"/projects"} element={<ProjectListScreen />}></Route>
+            <Route
+              path={"/projects/:projectId/*"}
+              element={<ProjectScreen />}
+            ></Route>
+          </Routes>
+        </Router>
+      </Main>
+    </Container>
+  );
+};
+
+const PageHeader = () => {
   const { logout, user } = useAuth();
 
   const items = [
@@ -33,25 +55,20 @@ export const AuthenticatedApp = () => {
     [logout]
   );
   return (
-    <Container>
-      <Header between={true}>
-        <HeaderLeft gap={true}>
-          <SoftwareLogo width={"18rem"} color={"rgb(38,132,255)"} />
-          <h2>项目</h2>
-          <h2>用户</h2>
-        </HeaderLeft>
-        <HeaderRight>
-          <Dropdown overlay={<Menu onClick={handleClick} items={items} />}>
-            <Button type={"link"} onClick={(e) => e.preventDefault()}>
-              Hi, {user?.name}
-            </Button>
-          </Dropdown>
-        </HeaderRight>
-      </Header>
-      <Main>
-        <ProjectListScreen />
-      </Main>
-    </Container>
+    <Header between={true}>
+      <HeaderLeft gap={true}>
+        <SoftwareLogo width={"18rem"} color={"rgb(38,132,255)"} />
+        <h2>项目</h2>
+        <h2>用户</h2>
+      </HeaderLeft>
+      <HeaderRight>
+        <Dropdown overlay={<Menu onClick={handleClick} items={items} />}>
+          <Button type={"link"} onClick={(e) => e.preventDefault()}>
+            Hi, {user?.name}
+          </Button>
+        </Dropdown>
+      </HeaderRight>
+    </Header>
   );
 };
 const Container = styled.div`
