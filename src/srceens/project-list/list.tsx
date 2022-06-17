@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 import { User } from "./search-panel";
 // TODO 将所有id类型改为number
 export interface Project {
-  id: string;
+  id: number;
   name: string;
-  personId: string;
+  personId: number;
   pin: string;
   organization: string;
   created: number;

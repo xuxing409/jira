@@ -4,19 +4,19 @@ import { SearchPanel } from "./search-panel";
 import { useDebounce, useDocumentTitle } from "utils";
 import styled from "@emotion/styled";
 import { Typography } from "antd";
-import { useProjects } from "./project";
+import { useProjects } from "../../utils/project";
 import { useUsers } from "utils/user";
-import { useUrlQueryParam } from "utils/url";
+import { useProjectsSearchParam } from "./util";
 
 export const ProjectListScreen = () => {
-  // react hook
-  // 地址状态保留
-  const [param,setParam] = useUrlQueryParam(['name', 'personId']);
-  // custom hook
-  const debounceParam = useDebounce(param, 200);
-  const { isLoading, error, data: list } = useProjects(debounceParam);
-  const { data: users } = useUsers();
   useDocumentTitle("项目列表", false);
+  // react hook
+  // 获取SearchQuery参数
+  const [param,setParam] = useProjectsSearchParam()
+  // custom hook
+  const { isLoading, error, data: list } = useProjects(useDebounce(param, 200));
+  const { data: users } = useUsers();
+
 
   return (
     <Container>
@@ -30,7 +30,7 @@ export const ProjectListScreen = () => {
   );
 };
 
-ProjectListScreen.whyDidYouRender = false
+ProjectListScreen.whyDidYouRender = true
 
 const Container = styled.div`
   padding: 3.2rem;
