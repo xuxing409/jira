@@ -1,6 +1,7 @@
 import * as auth from "auth-provider";
 import { useAuth } from "context/auth-context";
 import qs from "qs";
+import { useCallback } from "react";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 // 声明一个接口用于传递data
@@ -53,12 +54,15 @@ export const useHttp = () => {
   // 1.获取用户token
   const { user } = useAuth();
   // 使用Parameters Ts操作符 和 typeof（这个和js的typeof（runtime） 不同,是静态的时候运行） 替换和http方法相同的类型
-  return (...[endpoint, config]: Parameters<typeof http>) =>
-    // 2.设置token
-    http(endpoint, {
-      ...config,
-      token: user?.token,
-    });
+  return useCallback(
+    (...[endpoint, config]: Parameters<typeof http>) =>
+      // 2.设置token
+      http(endpoint, {
+        ...config,
+        token: user?.token,
+      }),
+    [user?.token]
+  );
 };
 
 // 类型别名
