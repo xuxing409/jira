@@ -32,6 +32,10 @@ export const useAsync = <D>(
     ...initialState,
   });
 
+  // useState传入函数的含义是:惰性初始化(用于耗时的计算,函数内部会直接执行一遍),
+  // 所以用useState保存函数,不能直接传入函数
+  const [retry, setRetry] = useState(() => () => {});
+
   // 请求正常时，设置数据
   const setData = (data: D) =>
     setState({
@@ -49,11 +53,22 @@ export const useAsync = <D>(
     });
 
   // run 用来触发异步请求
-  const run = (promise: Promise<D>) => {
+  const run = (
+    promise: Promise<D>,
+    runConfig?: { retry: () => Promise<D> }
+  ) => {
     // 如果传递进来的不是promise则返回异常
     if (!promise || !promise.then) {
       throw new Error("请传入Promise 类型数据");
     }
+
+    // 保存刷新函数,setRetry 自动执行第一层;返回函数
+    // 这里不能直接使用promise,因为promise是已经拿到结果,而不是拿到执行promise的函数
+    setRetry(() => () => {
+      if (runConfig?.retry) {
+        run(runConfig?.retry(), runConfig);
+      }
+    });
     // 设置请求状态为loading
     setState({ ...state, stat: "loading" });
 
@@ -71,6 +86,7 @@ export const useAsync = <D>(
         return error;
       });
   };
+
   return {
     // 返回请求状态
     isIdle: state.stat === "idle",
@@ -81,6 +97,8 @@ export const useAsync = <D>(
     run,
     setData,
     setError,
+    // retry 重新跑一边run
+    retry,
     // 返回数据
     ...state,
   };

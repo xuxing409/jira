@@ -14,7 +14,8 @@ export const ProjectListScreen = () => {
   // 获取SearchQuery参数
   const [param,setParam] = useProjectsSearchParam()
   // custom hook
-  const { isLoading, error, data: list } = useProjects(useDebounce(param, 200));
+  // 获取列表
+  const { isLoading, error, data: list,retry } = useProjects(useDebounce(param, 200));
   const { data: users } = useUsers();
 
 
@@ -25,7 +26,7 @@ export const ProjectListScreen = () => {
       {error ? (
         <Typography.Text type={"danger"}>{error.message}</Typography.Text>
       ) : null}
-      <List users={users || []} loading={isLoading} dataSource={list || []} />
+      <List refresh={retry} users={users || []} loading={isLoading} dataSource={list || []} />
     </Container>
   );
 };
