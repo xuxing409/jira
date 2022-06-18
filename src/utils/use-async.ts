@@ -2,6 +2,7 @@
 // 很多组件都有请求加载loading状态&也存在加载失败的情况
 // 以上情形通过本钩子来统一管理状态
 import { useState } from "react";
+import { useMountedRef } from "utils";
 interface State<D> {
   error: Error | null;
   data: D | null;
@@ -31,6 +32,8 @@ export const useAsync = <D>(
     ...defaultInitialState,
     ...initialState,
   });
+
+  const mountedRef = useMountedRef();
 
   // useState传入函数的含义是:惰性初始化(用于耗时的计算,函数内部会直接执行一遍),
   // 所以用useState保存函数,不能直接传入函数
@@ -74,7 +77,7 @@ export const useAsync = <D>(
 
     return promise
       .then((data) => {
-        setData(data);
+        if (mountedRef.current) setData(data);
         return data;
       })
       .catch((error) => {
