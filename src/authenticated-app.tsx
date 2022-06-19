@@ -1,8 +1,8 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import styled from "@emotion/styled";
 import { useAuth } from "context/auth-context";
 import { ProjectListScreen } from "srceens/project-list";
-import { Row } from "components/lib";
+import { ButtonNoPadding, Row } from "components/lib";
 import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
 import { Button, Dropdown, Menu } from "antd";
 import type { MenuProps } from "antd";
@@ -10,6 +10,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { Navigate, Route, Routes } from "react-router";
 import ProjectScreen from "srceens/project";
 import { resetRoute } from "utils";
+import { ProjectModal } from "srceens/project-list/project-modal";
+import { ProjectPopover } from "components/project-popover";
 /**
  * grid 和 flex 各自的应用场景
  * 1. 要考虑，是一维布局 还是 二维布局
@@ -23,14 +25,15 @@ import { resetRoute } from "utils";
  */
 
 export const AuthenticatedApp = () => {
+  const [projectModalOpen, setProjectModalOpen] = useState(false);
   return (
     <Container>
-      <PageHeader />
+      <PageHeader setProjectModalOpen={setProjectModalOpen}/>
       <Main>
         <Router>
           <Routes>
             <Route path="/" element={<Navigate to={"projects"}></Navigate>} />
-            <Route path={"/projects"} element={<ProjectListScreen />}></Route>
+            <Route path={"/projects"} element={<ProjectListScreen setProjectModalOpen={setProjectModalOpen}/>}></Route>
             <Route
               path={"/projects/:projectId/*"}
               element={<ProjectScreen />}
@@ -38,11 +41,31 @@ export const AuthenticatedApp = () => {
           </Routes>
         </Router>
       </Main>
+      <ProjectModal
+        projectModalOpen={projectModalOpen}
+        onClose={() => setProjectModalOpen(false)}
+      />
     </Container>
   );
 };
 
-const PageHeader = () => {
+const PageHeader = (props: {setProjectModalOpen:(isOpen:boolean)=> void}) => {
+  return (
+    <Header between={true}>
+      <HeaderLeft gap={true}>
+        <ButtonNoPadding  type="link" onClick={(e) => resetRoute()}>
+          <SoftwareLogo width={"18rem"} color={"rgb(38,132,255)"} />
+        </ButtonNoPadding>
+        <ProjectPopover  setProjectModalOpen={props.setProjectModalOpen}/>
+        <span>用户</span>
+      </HeaderLeft>
+      <HeaderRight>
+        <User />
+      </HeaderRight>
+    </Header>
+  );
+};
+const User = () => {
   const { logout, user } = useAuth();
 
   const items = [
@@ -57,24 +80,15 @@ const PageHeader = () => {
     [logout]
   );
   return (
-    <Header between={true}>
-      <HeaderLeft gap={true}>
-        <Button type="link" onClick={e=> resetRoute()}>
-          <SoftwareLogo width={"18rem"} color={"rgb(38,132,255)"} />
-        </Button>
-        <h2>项目</h2>
-        <h2>用户</h2>
-      </HeaderLeft>
-      <HeaderRight>
-        <Dropdown overlay={<Menu onClick={handleClick} items={items} />}>
-          <Button type={"link"} onClick={(e) => e.preventDefault()}>
-            Hi, {user?.name}
-          </Button>
-        </Dropdown>
-      </HeaderRight>
-    </Header>
+    <Dropdown overlay={<Menu onClick={handleClick} items={items} />}>
+      <Button type={"link"} onClick={(e) => e.preventDefault()}>
+        Hi, {user?.name}
+      </Button>
+    </Dropdown>
   );
 };
+
+// temporal dead zone暂时性死区
 const Container = styled.div`
   display: grid;
   grid-template-rows: 6rem 1fr;

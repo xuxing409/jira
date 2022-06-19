@@ -1,7 +1,8 @@
-import { Table, TableProps } from "antd";
+import { Dropdown, Menu, MenuProps, Table, TableProps } from "antd";
+import { ButtonNoPadding } from "components/lib";
 import { Pin } from "components/pin";
 import dayjs from "dayjs";
-import React from "react";
+import React, { useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useEditProject } from "utils/project";
 import { User } from "./search-panel";
@@ -16,15 +17,33 @@ export interface Project {
 }
 // 通过继承TableProps 实现将所有属性一次性传递到table上
 interface ListProps extends TableProps<Project> {
+  setProjectModalOpen: (isOpen: boolean) => void;
   users: User[];
   refresh?: () => void;
 }
 
-export const List = ({ users, ...props }: ListProps) => {
+export const List = ({ users, setProjectModalOpen, ...props }: ListProps) => {
   const { mutate } = useEditProject();
   // project.id 一开始就拿得到， pin要等变化时才能拿到
   // 使用函数柯里化,分步储存参数
-  const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin }).then(props.refresh);
+  const pinProject = (id: number) => (pin: boolean) =>
+    mutate({ id, pin }).then(props.refresh);
+
+  const items: MenuProps["items"] = [
+    { label: "编辑", key: "edit" }, // 菜单项务必填写 key
+    { label: "编辑", key: "edit1" }, // 菜单项务必填写 key
+  ];
+
+  const handleClick: MenuProps["onClick"] = useCallback(
+    (e: { key: string }) => {
+      switch (e.key) {
+        case "edit":
+          setProjectModalOpen(true);
+          break;
+      }
+    },
+    [setProjectModalOpen]
+  );
   return (
     <Table
       pagination={false}
@@ -76,6 +95,15 @@ export const List = ({ users, ...props }: ListProps) => {
                   ? dayjs(project.created).format("YYYY-MM-DD")
                   : "无"}
               </span>
+            );
+          },
+        },
+        {
+          render(value, project) {
+            return (
+              <Dropdown overlay={<Menu onClick={handleClick} items={items} />}>
+                <ButtonNoPadding type={"link"}>...</ButtonNoPadding>
+              </Dropdown>
             );
           },
         },
