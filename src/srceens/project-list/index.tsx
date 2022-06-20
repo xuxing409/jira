@@ -1,16 +1,17 @@
-import { useState } from "react";
+import React from "react";
 import { List } from "./list";
 import { SearchPanel } from "./search-panel";
 import { useDebounce, useDocumentTitle } from "utils";
 import styled from "@emotion/styled";
-import { Button, Typography } from "antd";
+import { Typography } from "antd";
 import { useProjects } from "../../utils/project";
 import { useUsers } from "utils/user";
 import { useProjectsSearchParam } from "./util";
 import { Row } from "components/lib";
 
 interface ProjectListScreenProps {
-  setProjectModalOpen: (isOpen: boolean) => void;
+  setProjectModalOpen: (isOpen: boolean)=> void
+  projectButton: JSX.Element
 }
 
 export const ProjectListScreen = (props: ProjectListScreenProps) => {
@@ -32,9 +33,12 @@ export const ProjectListScreen = (props: ProjectListScreenProps) => {
     <Container>
       <Row between={true}>
         <h1>项目列表</h1>
-        <Button onClick={() => props.setProjectModalOpen(true)}>
+        {
+          props.projectButton
+        }
+        {/* <Button onClick={() => props.setProjectModalOpen(true)}>
           创建项目
-        </Button>
+        </Button> */}
       </Row>
 
       <SearchPanel users={users || []} param={param} setParam={setParam} />
