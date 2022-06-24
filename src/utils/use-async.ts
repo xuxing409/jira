@@ -1,7 +1,7 @@
 // useAsync 用于维护loading 和 error信息,
 // 很多组件都有请求加载loading状态&也存在加载失败的情况
 // 以上情形通过本钩子来统一管理状态
-import { useCallback, useState } from "react";
+import { useCallback, useReducer, useState } from "react";
 import { useMountedRef } from "utils";
 interface State<D> {
   error: Error | null;
@@ -18,6 +18,13 @@ const defaultInitialState: State<null> = {
 const defaultConfig = {
   throwOnError: false,
 };
+const useSafeDispatch = <T>(dispatch: (...args: T[]) => void) => {
+  const mountedRef = useMountedRef();
+  return useCallback(
+    (...args: T[]) => (mountedRef.current ? dispatch(...args) : void 0),
+    [dispatch, mountedRef]
+  );
+};
 
 // 使用hook 和 闭包 储存数据
 // State<D>作用使用 initialState对象的data 反向推导出D类型
@@ -28,12 +35,15 @@ export const useAsync = <D>(
   const config = { ...defaultConfig, ...initialConfig };
 
   // 函数传递的state覆盖默认state
-  const [state, setState] = useState<State<D>>({
-    ...defaultInitialState,
-    ...initialState,
-  });
+  const [state, dispatch] = useReducer(
+    (state: State<D>, action: Partial<State<D>>) => ({ ...state, ...action }),
+    {
+      ...defaultInitialState,
+      ...initialState,
+    }
+  );
 
-  const mountedRef = useMountedRef();
+  const safeDispatch = useSafeDispatch(dispatch);
 
   // useState传入函数的含义是:惰性初始化(用于耗时的计算,函数内部会直接执行一遍),
   // 所以用useState保存函数,不能直接传入函数
@@ -42,23 +52,23 @@ export const useAsync = <D>(
   // 请求正常时，设置数据
   const setData = useCallback(
     (data: D) =>
-      setState({
+      safeDispatch({
         data,
         stat: "success",
         error: null,
       }),
-    []
+    [safeDispatch]
   );
 
   // 请求异常时，设置异常
   const setError = useCallback(
     (error: Error) =>
-      setState({
+      safeDispatch({
         error,
         stat: "error",
         data: null,
       }),
-    []
+    [safeDispatch]
   );
 
   // run 用来触发异步请求
@@ -77,11 +87,11 @@ export const useAsync = <D>(
         }
       });
       // 设置请求状态为loading   使用函数解决依赖无限刷新
-      setState((prevState) => ({ ...prevState, stat: "loading" }));
+      safeDispatch({ stat: "loading" });
 
       return promise
         .then((data) => {
-          if (mountedRef.current) setData(data);
+          setData(data);
           return data;
         })
         .catch((error) => {
@@ -93,7 +103,7 @@ export const useAsync = <D>(
           return error;
         });
     },
-    [config.throwOnError, mountedRef, setData, setError]
+    [config.throwOnError, safeDispatch, setData, setError]
   );
 
   return {
