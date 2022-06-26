@@ -2,7 +2,7 @@ import { useCallback, useEffect } from "react";
 import { cleanObject } from "utils";
 import { useHttp } from "utils/http";
 import { useAsync } from "utils/use-async";
-import { Project } from "../srceens/project-list/list";
+import { Project } from "../screens/project-list/list";
 
 // Partial 将类型中的属性变为全部可选
 export const useProjects = (param?: Partial<Project>) => {

@@ -1,8 +1,8 @@
 import React, { memo } from "react";
 import { Link } from "react-router-dom";
 import { Route, Routes } from "react-router";
-import KanbanScreen from "srceens/kanban";
-import EpicScreen from "srceens/epic";
+import KanbanScreen from "screens/kanban";
+import EpicScreen from "screens/epic";
 const ProjectScreen = memo(() => {
   return (
     <div>
