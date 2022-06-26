@@ -1,16 +1,16 @@
 import React, { useCallback, useState } from "react";
 import styled from "@emotion/styled";
 import { useAuth } from "context/auth-context";
-import { ProjectListScreen } from "srceens/project-list";
+import { ProjectListScreen } from "screens/project-list";
 import { ButtonNoPadding, Row } from "components/lib";
 import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
 import { Button, Dropdown, Menu } from "antd";
 import type { MenuProps } from "antd";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Navigate, Route, Routes } from "react-router";
-import ProjectScreen from "srceens/project";
+import ProjectScreen from "screens/project";
 import { resetRoute } from "utils";
-import { ProjectModal } from "srceens/project-list/project-modal";
+import { ProjectModal } from "screens/project-list/project-modal";
 import { ProjectPopover } from "components/project-popover";
 /**
  * grid 和 flex 各自的应用场景

@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { User } from "srceens/project-list/search-panel";
+import { User } from "screens/project-list/search-panel";
 import * as auth from "auth-provider";
 import { AuthForm, bootstrapUser } from "context/auth-context";
 import { AppDispatch, RootState } from "store";
+
 interface State {
   user: User | null;
 }
@@ -21,6 +22,7 @@ export const authSlice = createSlice({
 });
 
 const { setUser } = authSlice.actions;
+
 // 获取user信息
 export const selectUser = (state: RootState) => state.auth.user;
 

@@ -1,11 +1,12 @@
 import React, { ReactNode, useCallback } from "react";
 import * as auth from "auth-provider";
-import { User } from "srceens/project-list/search-panel";
+import { User } from "screens/project-list/search-panel";
 import { http } from "utils/http";
 import { useMount } from "utils";
 import { useAsync } from "utils/use-async";
 import { FullPageErrorFallback, FullPageLoading } from "components/lib";
 import * as authStore from "store/auth.slice";
+import { bootstrap, selectUser } from "store/auth.slice";
 import { useDispatch, useSelector } from "react-redux";
 
 export interface AuthForm {
@@ -30,12 +31,11 @@ export const bootstrapUser = async () => {
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // const [user, setUser] = useState<User | null>(null);
   const { error, isLoading, isIdle, isError, run } = useAsync<User | null>();
-
-  const dispatch: (...args: unknown[]) => Promise<User> = useDispatch();
+  const dispatch: (...args: any[]) => Promise<User> = useDispatch();
 
   // 整个app加载时,检查token
   useMount(() => {
-    run(dispatch(authStore.bootstrap()));
+    run(dispatch(bootstrap()));
   });
   if (isIdle || isLoading) {
     return <FullPageLoading />;
@@ -47,8 +47,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 };
 // useContext 消费 获取user context 登录验证信息
 export const useAuth = () => {
-  const dispatch: (...args: unknown[]) => Promise<User> = useDispatch();
-  const user = useSelector(authStore.selectUser);
+  const dispatch: (...args: any[]) => Promise<User> = useDispatch();
+  const user = useSelector(selectUser);
+
   const login = useCallback(
     (form: AuthForm) => dispatch(authStore.login(form)),
     [dispatch]
@@ -58,6 +59,7 @@ export const useAuth = () => {
     [dispatch]
   );
   const logout = useCallback(() => dispatch(authStore.logout()), [dispatch]);
+
   return {
     user,
     login,

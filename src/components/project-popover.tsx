@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Button, Divider, List, Popover, Typography } from "antd";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { projectListActions } from "srceens/project-list/project-list.slice";
+import { projectListActions } from "screens/project-list/project-list.slice";
 import { useProjects } from "utils/project";
 import { ButtonNoPadding } from "./lib";
 

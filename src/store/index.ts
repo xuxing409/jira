@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { projectListSlice } from "srceens/project-list/project-list.slice";
+import { projectListSlice } from "screens/project-list/project-list.slice";
 import { authSlice } from "./auth.slice";
 
-// 仓库
+// 注册仓库
 export const rootReducer = {
   projectList: projectListSlice.reducer,
   auth: authSlice.reducer,
@@ -14,5 +14,4 @@ export const store = configureStore({
 });
 
 export type AppDispatch = typeof store.dispatch;
-
 export type RootState = ReturnType<typeof store.getState>;
