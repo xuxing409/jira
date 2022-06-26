@@ -6,16 +6,12 @@ import styled from "@emotion/styled";
 import { Typography } from "antd";
 import { useProjects } from "../../utils/project";
 import { useUsers } from "utils/user";
-import { useProjectsSearchParam } from "./util";
-import { Row } from "components/lib";
+import { useProjectModal, useProjectsSearchParam } from "./util";
+import { ButtonNoPadding, Row } from "components/lib";
 
-interface ProjectListScreenProps {
-  setProjectModalOpen: (isOpen: boolean)=> void
-  projectButton: JSX.Element
-}
-
-export const ProjectListScreen = (props: ProjectListScreenProps) => {
+export const ProjectListScreen = () => {
   useDocumentTitle("项目列表", false);
+  const { open } = useProjectModal();
   // react hook
   // 获取SearchQuery参数
   const [param, setParam] = useProjectsSearchParam();
@@ -33,12 +29,10 @@ export const ProjectListScreen = (props: ProjectListScreenProps) => {
     <Container>
       <Row between={true}>
         <h1>项目列表</h1>
-        {
-          props.projectButton
-        }
-        {/* <Button onClick={() => props.setProjectModalOpen(true)}>
+
+        <ButtonNoPadding onClick={open} type={"link"}>
           创建项目
-        </Button> */}
+        </ButtonNoPadding>
       </Row>
 
       <SearchPanel users={users || []} param={param} setParam={setParam} />
@@ -46,7 +40,6 @@ export const ProjectListScreen = (props: ProjectListScreenProps) => {
         <Typography.Text type={"danger"}>{error.message}</Typography.Text>
       ) : null}
       <List
-        setProjectModalOpen={props.setProjectModalOpen}
         refresh={retry}
         users={users || []}
         loading={isLoading}

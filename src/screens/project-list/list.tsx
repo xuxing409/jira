@@ -17,12 +17,11 @@ export interface Project {
 }
 // 通过继承TableProps 实现将所有属性一次性传递到table上
 interface ListProps extends TableProps<Project> {
-  setProjectModalOpen: (isOpen: boolean) => void;
   users: User[];
   refresh?: () => void;
 }
 
-export const List = ({ users, setProjectModalOpen, ...props }: ListProps) => {
+export const List = ({ users, ...props }: ListProps) => {
   const { mutate } = useEditProject();
   // project.id 一开始就拿得到， pin要等变化时才能拿到
   // 使用函数柯里化,分步储存参数
@@ -38,11 +37,11 @@ export const List = ({ users, setProjectModalOpen, ...props }: ListProps) => {
     (e: { key: string }) => {
       switch (e.key) {
         case "edit":
-          setProjectModalOpen(true);
+          // setProjectModalOpen(true);
           break;
       }
     },
-    [setProjectModalOpen]
+    []
   );
   return (
     <Table
