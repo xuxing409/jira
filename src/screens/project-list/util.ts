@@ -3,7 +3,7 @@ import { useProject } from "utils/project";
 import { useUrlQueryParam } from "utils/url";
 
 // 项目列表搜索的参数
-export const useProjectsSearchParam = () => {
+export const useProjectsSearchParams = () => {
   const [param, setParam] = useUrlQueryParam(["name", "personId"]);
   return [
     useMemo(
@@ -15,6 +15,11 @@ export const useProjectsSearchParam = () => {
     ),
     setParam,
   ] as const;
+};
+
+export const useProjectsQueryKey = () => {
+  const [params] = useProjectsSearchParams();
+  return ["projects", params];
 };
 
 export const useProjectModal = () => {

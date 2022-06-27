@@ -5,7 +5,7 @@ import { useProjectModal } from "screens/project-list/util";
 import { useProjects } from "utils/project";
 import { ButtonNoPadding } from "./lib";
 
-
+// 项目悬浮框
 export const ProjectPopover = ()=> {
   const {open} = useProjectModal()
 
@@ -15,7 +15,7 @@ export const ProjectPopover = ()=> {
     <Typography.Text type={"secondary"}>收藏项目</Typography.Text>
     <List>
       {
-        pinnedProject?.map(project => <List.Item>
+        pinnedProject?.map(project => <List.Item key={project.id}>
           <List.Item.Meta title={project.name}/>
         </List.Item>)
       }

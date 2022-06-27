@@ -1,9 +1,12 @@
 import { useCallback, useEffect } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { cleanObject } from "utils";
+import { QueryKey, useMutation, useQuery, useQueryClient } from "react-query";
 import { useHttp } from "utils/http";
-import { useAsync } from "utils/use-async";
-import { Project } from "../screens/project-list/list";
+import { Project } from "screens/project-list/list";
+import {
+  useAddConfig,
+  useDeleteConfig,
+  useEditConfig,
+} from "./use-optimistic-option";
 
 // Partial 将类型中的属性变为全部可选
 export const useProjects = (param?: Partial<Project>) => {
@@ -16,25 +19,22 @@ export const useProjects = (param?: Partial<Project>) => {
 };
 
 // 编辑
-export const useEditProject = () => {
+export const useEditProject = (queryKey: QueryKey) => {
+  // 异步请求
   const client = useHttp();
-  const queryClient = useQueryClient();
+
   return useMutation(
     (params: Partial<Project>) =>
       client(`projects/${params.id}`, {
         method: "PATCH",
         data: params,
       }),
-    {
-      // 清除缓存
-      onSuccess: () => queryClient.invalidateQueries("projects"),
-    }
+    useEditConfig(queryKey)
   );
 };
 // 添加
-export const useAddProject = () => {
+export const useAddProject = (queryKey: QueryKey) => {
   const client = useHttp();
-  const queryClient = useQueryClient();
 
   return useMutation(
     (params: Partial<Project>) =>
@@ -42,10 +42,19 @@ export const useAddProject = () => {
         method: "POST",
         data: params,
       }),
-    {
-      // 清除缓存
-      onSuccess: () => queryClient.invalidateQueries("projects"),
-    }
+    useAddConfig(queryKey)
+  );
+};
+// 删除
+export const useDeleteProject = (queryKey: QueryKey) => {
+  const client = useHttp();
+
+  return useMutation(
+    ({ id }: { id: number }) =>
+      client(`projects/${id}`, {
+        method: "DELETE",
+      }),
+    useDeleteConfig(queryKey)
   );
 };
 

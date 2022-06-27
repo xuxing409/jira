@@ -6,7 +6,7 @@ import styled from "@emotion/styled";
 import { Typography } from "antd";
 import { useProjects } from "../../utils/project";
 import { useUsers } from "utils/user";
-import { useProjectModal, useProjectsSearchParam } from "./util";
+import { useProjectModal, useProjectsSearchParams } from "./util";
 import { ButtonNoPadding, ErrorBox, Row } from "components/lib";
 
 export const ProjectListScreen = () => {
@@ -14,7 +14,7 @@ export const ProjectListScreen = () => {
   const { open } = useProjectModal();
   // react hook
   // 获取SearchQuery参数
-  const [param, setParam] = useProjectsSearchParam();
+  const [param, setParam] = useProjectsSearchParams();
   // custom hook
   // 获取列表
   const { isLoading, error, data: list } = useProjects(useDebounce(param, 200));
