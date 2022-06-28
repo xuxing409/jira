@@ -12,7 +12,8 @@ import {
 export const useProjects = (param?: Partial<Project>) => {
   const client = useHttp();
 
-  // 第一个参数用数组 数组第一位为存储标识，第二位放依赖
+  // useQuery（查）第一个参数用数组 数组第一位为存储标识(作为useQuery查询的唯一标识，该值唯一)，
+  // 第二位放依赖
   return useQuery<Project[]>(["projects", param], () =>
     client("projects", { data: param })
   );
@@ -23,6 +24,9 @@ export const useEditProject = (queryKey: QueryKey) => {
   // 异步请求
   const client = useHttp();
 
+  // useMutation（增、改、删）操作
+  // 第一个参数用于执行操作,执行返回的mutate函数，
+  // 传给mutate的参数会作为useMutation第一个回调函数的参数
   return useMutation(
     (params: Partial<Project>) =>
       client(`projects/${params.id}`, {

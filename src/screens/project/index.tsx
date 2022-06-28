@@ -1,6 +1,6 @@
 import React, { memo, useCallback } from "react";
 import { Route, Routes, To, useLocation, useNavigate } from "react-router";
-import KanbanScreen from "screens/kanban";
+import { KanbanScreen } from "screens/kanban";
 import EpicScreen from "screens/epic";
 import styled from "@emotion/styled";
 import { Menu, MenuProps } from "antd";
@@ -49,6 +49,7 @@ const Aside = styled.aside`
 const Main = styled.div`
   box-shadow: -5px 0 5px -5px rgba(0, 0, 0, 0.1);
   display: flex;
+  overflow: hidden;
 `;
 const Container = styled.div`
   display: grid;
