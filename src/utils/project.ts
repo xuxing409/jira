@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { QueryKey, useMutation, useQuery, useQueryClient } from "react-query";
 import { useHttp } from "utils/http";
-import { Project } from "screens/project-list/list";
+import { Project } from "types/project";
 import {
   useAddConfig,
   useDeleteConfig,
@@ -12,7 +12,7 @@ import {
 export const useProjects = (param?: Partial<Project>) => {
   const client = useHttp();
 
-  // 第一个参数用数组 数组第二位放依赖
+  // 第一个参数用数组 数组第一位为存储标识，第二位放依赖
   return useQuery<Project[]>(["projects", param], () =>
     client("projects", { data: param })
   );

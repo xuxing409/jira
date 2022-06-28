@@ -1,6 +1,6 @@
 // 本文件用于请求user信息
 import { useEffect } from "react";
-import { User } from "screens/project-list/search-panel";
+import { User } from "types/user";
 import { cleanObject } from "utils";
 import { useHttp } from "./http";
 import { useAsync } from "./use-async";

@@ -6,17 +6,9 @@ import React, { useCallback } from "react";
 import type { MenuInfo } from "rc-menu/lib/interface";
 import { Link } from "react-router-dom";
 import { useDeleteProject, useEditProject } from "utils/project";
-import { User } from "./search-panel";
+import { User } from "../../types/user";
 import { useProjectModal, useProjectsQueryKey } from "./util";
-// TODO 将所有id类型改为number
-export interface Project {
-  id: number;
-  name: string;
-  personId: number;
-  pin: boolean;
-  organization: string;
-  created: number;
-}
+import { Project } from "types/project";
 // 通过继承TableProps 实现将所有属性一次性传递到table上
 interface ListProps extends TableProps<Project> {
   users: User[];
@@ -103,21 +95,24 @@ const More = ({ project }: { project: Project }) => {
 
   const { startEdit } = useProjectModal();
   const editProject = useCallback((id: number) => startEdit(id), [startEdit]);
-  
+
   // 获取删除请求方法
   const { mutate: deleteProject } = useDeleteProject(useProjectsQueryKey());
   // 确定框
-  const confirmDeleteProject = useCallback((id: number) => {
-    Modal.confirm({
-      title: "确定删除这个项目吗?",
-      content: "点击确定删除",
-      okText: "确定",
-      cancelText: '取消',
-      onOk() {
-        deleteProject({id});
-      },
-    });
-  },[deleteProject]);
+  const confirmDeleteProject = useCallback(
+    (id: number) => {
+      Modal.confirm({
+        title: "确定删除这个项目吗?",
+        content: "点击确定删除",
+        okText: "确定",
+        cancelText: "取消",
+        onOk() {
+          deleteProject({ id });
+        },
+      });
+    },
+    [deleteProject]
+  );
 
   const handleClick = useCallback(
     (e: MenuInfo, project: Project) => {
@@ -130,7 +125,7 @@ const More = ({ project }: { project: Project }) => {
           break;
       }
     },
-    [editProject,confirmDeleteProject]
+    [editProject, confirmDeleteProject]
   );
 
   return (

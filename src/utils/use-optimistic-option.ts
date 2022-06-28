@@ -8,7 +8,7 @@ export const useConfig = (
   const queryClient = useQueryClient();
 
   return {
-    // 操作成功后清除缓存
+    // 操作成功后执行：invalidateQueries 让缓存失效，失效就会重新获取
     onSuccess: () => queryClient.invalidateQueries(queryKey),
     // useMutation 一发生就立刻调用 做乐观更新
     async onMutate(target: any) {

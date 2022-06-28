@@ -1,17 +1,10 @@
 /* @jsxImportSource @emotion/react */
 import React from "react";
 import { Form, Input, Select } from "antd";
-import { Project } from "./list";
+import { Project } from "../../types/project";
 import { UserSelect } from "components/user-select";
+import { User } from "../../types/user";
 
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  title: string;
-  organization: string;
-  token: string;
-}
 interface SearchPanelProps {
   users: User[];
   param: Partial<Pick<Project, "name" | "personId">>;
@@ -31,7 +24,7 @@ export const SearchPanel = ({ users, param, setParam }: SearchPanelProps) => {
 
       <Form.Item>
         <UserSelect
-        defaultOptionName={"负责人"}
+          defaultOptionName={"负责人"}
           value={param.personId}
           onChange={(value) => setParam({ ...param, personId: value })}
         />

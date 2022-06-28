@@ -1,10 +1,11 @@
 import React, { ReactNode } from "react";
 import * as auth from "auth-provider";
-import { User } from "screens/project-list/search-panel";
+import { User } from "types/user";
 import { http } from "utils/http";
 import { useMount } from "utils";
 import { useAsync } from "utils/use-async";
 import { FullPageErrorFallback, FullPageLoading } from "components/lib";
+import { useQueryClient } from "react-query";
 
 interface AuthForm {
   username: string;
@@ -38,7 +39,7 @@ AuthContext.displayName = "AuthContext"; // 组件名
 
 // 全局权限信息提供组件，相当于app组件的外层组件
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  // const [user, setUser] = useState<User | null>(null);
+  // 请求数据
   const {
     data: user,
     error,
@@ -49,10 +50,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setData: setUser,
   } = useAsync<User | null>();
 
+  const queryClient = useQueryClient();
+
   // point free
   const login = (form: AuthForm) => auth.login(form).then(setUser);
   const register = (form: AuthForm) => auth.register(form).then(setUser);
-  const logout = () => auth.logout().then(() => setUser(null));
+  const logout = () =>
+    auth.logout().then(() => {
+      setUser(null);
+      queryClient.clear();
+    });
 
   // 整个app加载时,检查token
   useMount(() => {
@@ -61,8 +68,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   if (isIdle || isLoading) {
     return <FullPageLoading />;
   }
-  if(isError) {
-    return <FullPageErrorFallback error={error} />
+  if (isError) {
+    return <FullPageErrorFallback error={error} />;
   }
   return (
     // context 传递 需要将属性放入value中,

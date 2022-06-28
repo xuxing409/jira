@@ -8,16 +8,19 @@ interface State<D> {
   data: D | null;
   stat: "idle" | "loading" | "error" | "success";
 }
-
+// 默认state
 const defaultInitialState: State<null> = {
   stat: "idle",
   data: null,
   error: null,
 };
 
+// 默认配置不抛出异常
 const defaultConfig = {
   throwOnError: false,
 };
+
+// 安全dispatch， 防止组件未挂载或者卸载时 修改组件状态
 const useSafeDispatch = <T>(dispatch: (...args: T[]) => void) => {
   const mountedRef = useMountedRef();
   return useCallback(
@@ -34,7 +37,10 @@ export const useAsync = <D>(
 ) => {
   const config = { ...defaultConfig, ...initialConfig };
 
-  // 函数传递的state覆盖默认state
+  // useReducer(reducer, initialArg, init)
+  // 第一个参数 reducer 是函数 (state, action) => newState，接受当前的 state 和操作行为。
+  // 第二个参数 initialArg 是状态初始值。
+  // 第三个参数 init 是懒惰初始化函数。
   const [state, dispatch] = useReducer(
     (state: State<D>, action: Partial<State<D>>) => ({ ...state, ...action }),
     {
@@ -43,6 +49,7 @@ export const useAsync = <D>(
     }
   );
 
+  // 安全dispatch
   const safeDispatch = useSafeDispatch(dispatch);
 
   // useState传入函数的含义是:惰性初始化(用于耗时的计算,函数内部会直接执行一遍),
