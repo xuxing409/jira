@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { ScreenContainer } from "components/lib";
 import React, { memo } from "react";
 import { useDocumentTitle } from "utils";
 import { useKanbans } from "utils/kanban";
@@ -11,7 +12,7 @@ const KanbanScreen = memo(() => {
   const { data: kanbans } = useKanbans(useKanbanSearchParams());
   const { data: currentProject } = useProjectInUrl();
   return (
-    <div>
+    <ScreenContainer>
       <h1>{currentProject?.name}看板</h1>
       <SearchPanel />
       <ColumnsContainer>
@@ -19,13 +20,15 @@ const KanbanScreen = memo(() => {
           <KanbanColumn kanban={kanban} key={kanban.id} />
         ))}
       </ColumnsContainer>
-    </div>
+    </ScreenContainer>
   );
 });
+
+
 const ColumnsContainer = styled.div`
   display: flex;
-  overflow: hidden;
-  margin-right: 2rem;
+ overflow-x: scroll;
+ flex: 1;
 `;
 
 export default KanbanScreen;
