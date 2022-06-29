@@ -1,4 +1,6 @@
 import { QueryKey, useQueryClient } from "react-query";
+import { Task } from "types/task";
+import { reorder } from "./reorder";
 
 // 用来生成useMution中的config
 export const useConfig = (
@@ -27,8 +29,9 @@ export const useConfig = (
   };
 };
 
-// 删除、修改、添加的乐观更新
+// 删除、修改、添加的乐观更新 使用useConfig生成参数
 export const useDeleteConfig = (queryKey: QueryKey) =>
+  // 函数第二个参数为函数，接收当前更新的对象和内存中旧的缓存对象
   useConfig(
     queryKey,
     (target, old) => old?.filter((item) => item.id !== target.id) || []
@@ -43,3 +46,17 @@ export const useEditConfig = (queryKey: QueryKey) =>
   );
 export const useAddConfig = (queryKey: QueryKey) =>
   useConfig(queryKey, (target, old) => (old ? [...old, target] : []));
+
+// 看板、任务的拖拽乐观更新
+export const useReorderKanbanConfig = (queryKey: QueryKey) =>
+  useConfig(queryKey, (target, old) => reorder({ list: old, ...target }));
+
+export const useReorderTaskConfig = (queryKey: QueryKey) =>
+  useConfig(queryKey, (target, old) => {
+    const orderedList = reorder({ list: old, ...target }) as Task[];
+    return orderedList.map((item) =>
+      item.id === target.fromId
+        ? { ...item, kanbanId: target.toKanbanId }
+        : item
+    );
+  });
