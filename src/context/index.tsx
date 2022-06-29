@@ -6,8 +6,16 @@ import { QueryClient, QueryClientProvider }  from 'react-query'
 // 但嵌套的优点是 还可以扩展嵌套别的组件
 
 export const AppProviders = ({children}:{children:ReactNode})=> {
+  const queryClient =new QueryClient({
+    defaultOptions: {
+      queries: {
+        // 是否开启窗口聚焦时刷新
+        refetchOnWindowFocus:false
+      }
+    }
+  })
   // QueryClientProvider react-query
-  return <QueryClientProvider client={new QueryClient()}>
+  return <QueryClientProvider client={queryClient}>
     <AuthProvider>
     {children}
   </AuthProvider>

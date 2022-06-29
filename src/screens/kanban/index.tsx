@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { Spin } from "antd";
 import { Drag, Drop, DropChild } from "components/drap-and-drop";
 import { ScreenContainer } from "components/lib";
+import { Profiler } from "components/profiler";
 import React, { memo, useCallback } from "react";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { useDocumentTitle } from "utils";
@@ -30,7 +31,8 @@ export const KanbanScreen = memo(() => {
   const onDragEnd = useDragEnd();
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+   <Profiler id={'kanban'}>
+     <DragDropContext onDragEnd={onDragEnd}>
       <ScreenContainer>
         <h1>{currentProject?.name}看板</h1>
         <SearchPanel />
@@ -62,6 +64,7 @@ export const KanbanScreen = memo(() => {
         <TaskModal />
       </ScreenContainer>
     </DragDropContext>
+   </Profiler>
   );
 });
 

@@ -8,6 +8,7 @@ import { loadServer, DevTools } from "jira-dev-tool";
 import "antd/dist/antd.less";
 
 import { AppProviders } from "context";
+import { Profiler } from 'components/profiler';
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -16,10 +17,12 @@ loadServer(() =>
   root.render(
     <React.StrictMode>
       {/* app级别提供者，一般用于共享全局用户信息token、主题等 */}
-      <AppProviders>
+     <Profiler id={'Root App'} phases={["mount"]}>
+     <AppProviders>
         <DevTools />
         <App />
       </AppProviders>
+     </Profiler>
     </React.StrictMode>
   )
 );
