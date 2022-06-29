@@ -1,7 +1,7 @@
 import React, { memo, useCallback } from "react";
 import { Route, Routes, To, useLocation, useNavigate } from "react-router";
 import { KanbanScreen } from "screens/kanban";
-import EpicScreen from "screens/epic";
+import {EpicScreen} from "screens/epic";
 import styled from "@emotion/styled";
 import { Menu, MenuProps } from "antd";
 
@@ -54,5 +54,6 @@ const Main = styled.div`
 const Container = styled.div`
   display: grid;
   grid-template-columns: 16rem 1fr;
+  width: 100%;
 `;
 export default ProjectScreen;

@@ -27,7 +27,7 @@ export const KanbanScreen = memo(() => {
   const { isLoading: taskIsLoading } = useTasks(useTasksSearchParams());
   const isLoading = kanbanIsLoading || taskIsLoading;
 
-  const onDragEnd = useDragEnd()
+  const onDragEnd = useDragEnd();
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
