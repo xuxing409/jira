@@ -25,7 +25,7 @@ import { UserPopover } from "components/user-popover";
  *
  */
 
-export const AuthenticatedApp = () => {
+ const AuthenticatedApp = () => {
   return (
     <Container>
       <Router>
@@ -106,3 +106,4 @@ const Main = styled.main`
   display: flex;
   overflow: hidden;
 `;
+export default AuthenticatedApp

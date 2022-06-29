@@ -9,7 +9,7 @@ import right from "assets/right.svg";
 import { useDocumentTitle } from "utils";
 import { ErrorBox } from "components/lib";
 // 登录/注册组件
-export const UnauthenticatedApp = () => {
+const UnauthenticatedApp = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   useDocumentTitle("请登录");
@@ -20,7 +20,7 @@ export const UnauthenticatedApp = () => {
       <ShadowCard>
         <Title>{isRegister ? "请注册" : "请登录"}</Title>
         <ErrorBox error={error} />
-        
+
         {isRegister ? (
           <RegisterScreen onError={setError} />
         ) : (
@@ -74,3 +74,4 @@ const Container = styled.div`
   align-items: center;
   min-height: 100vh;
 `;
+export default UnauthenticatedApp;
