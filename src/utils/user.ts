@@ -1,21 +1,16 @@
 // 本文件用于请求user信息
 import { useEffect } from "react";
+import { useQuery } from "react-query";
 import { User } from "types/user";
-import { cleanObject } from "utils";
 import { useHttp } from "./http";
-import { useAsync } from "./use-async";
 
 // 抽离出获取user 的请求
 export const useUsers = (param?: Partial<User>) => {
   const client = useHttp();
 
-  const { run, ...result } = useAsync<User[]>();
-
-  useEffect(() => {
-    run(client("users", { data: cleanObject(param || {}) }));
-
-    // 依赖项里加上client会无线循环
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [param]);
-  return result;
+  // useQuery（查）第一个参数用数组 数组第一位为存储标识(作为useQuery查询的唯一标识，该值唯一)，
+  // 第二位放依赖
+  return useQuery<User[]>(["users", param], () =>
+    client("users", { data: param })
+  );
 };
