@@ -54,7 +54,7 @@ const PageHeader = () => {
           <SoftwareLogo width={"18rem"} color={"rgb(38,132,255)"} />
         </ButtonNoPadding>
         <ProjectPopover />
-        <UserPopover/>
+        <UserPopover />
       </HeaderLeft>
       <HeaderRight>
         <User />
@@ -102,7 +102,7 @@ const HeaderLeft = styled(Row)``;
 
 const HeaderRight = styled.div``;
 
-const Main = styled.div`
+const Main = styled.main`
   display: flex;
   overflow: hidden;
 `;
